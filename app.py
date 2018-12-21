@@ -168,16 +168,24 @@ def death_disease():
     
     soup = BeautifulSoup(res, 'html.parser')
     
-    list_disease = []
+    list = []
+    for page in list(range(1, 10)):
+        url = 'https://terms.naver.com/list.nhn?cid=50871&categoryId=50871&page={}'.format(page)
+        res = requests.get(url).text
+        soup = BeautifulSoup(res, 'html.parser')
+        for kinds in list(range(1, 7)):
+            input = soup.select_one('#content > div.list_wrap > ul > li:nth-of-type({}) > div > div.subject > strong > a'.format(kinds))
+            list.append(input.text)
+        input_disease = random.choice(list)
+            
     # list_disease = soup.select_one('#content > div.list_wrap > ul > li:nth-of-type(1)').text
     # print(list_disease)
     # input_disease = soup.select_one('#content > div.list_wrap > ul > li:nth-of-type(2) > div.info_area > div.subject > strong > a').text
     # print(input_disease)
-    for kinds in list(range(1, 50)):
-        input = soup.select_one('#content > div.list_wrap > ul > li:nth-of-type({}) > div.info_area > div.subject > strong > a'.format(kinds)).text
-        list_disease.append(input)
-    
-    input_disease = random.sample(list_disease, 1)
+    # for kinds in list(range(1, 5)):
+    #     input = soup.select_one('#content > div.list_wrap > ul > li:nth-of-type({}) > div.info_area > div.subject > strong > a'.format(kinds)).text
+    #     list_disease.append(input)
+    # input_disease = random.sample(list_disease, 1)
     
     # 이름 받기
     input_name = request.args.get('name')
